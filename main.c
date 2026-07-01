@@ -20,5 +20,11 @@ int main(int argc, char* argv[]){
     if(destination_fd == -1)
         perror(argv[2]);
 
+
+    
+    if(close(source_fd) == -1)
+        perror("close()");
+    if(close(destination_fd) == -1)
+        perror("close()");
     return 0;
 }
