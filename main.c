@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <stdio.h>  // for perror only
 
+#define BUFFER_SIZE 4096
 
 int main(int argc, char* argv[]){
     if(argc == 1 || argc == 2){
@@ -13,15 +14,24 @@ int main(int argc, char* argv[]){
     
     int source_fd = open(argv[1], O_RDONLY);
     int destination_fd = open(argv[2], O_WRONLY | O_CREAT, 0644);
-    char buf[4096] = {};
+    ssize_t bytes_read = 0;
+    ssize_t bytes_write = 0;
+    char buf[BUFFER_SIZE] = {};
 
     if(source_fd == -1)
         perror(argv[1]);
     if(destination_fd == -1)
         perror(argv[2]);
 
-
-    
+    bytes_read = read(source_fd, buf, BUFFER_SIZE-1);
+    while(bytes_read > 0){
+        buf[bytes_read] = '\0';
+        if(bytes_write = write(destination_fd, buf, BUFFER_SIZE) == -1){
+            perror("write()");
+            return -1;
+        }
+        bytes_read = read(source_fd, buf, BUFFER_SIZE-1);
+    }
     if(close(source_fd) == -1)
         perror("close()");
     if(close(destination_fd) == -1)
