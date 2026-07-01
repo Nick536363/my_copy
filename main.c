@@ -27,13 +27,19 @@ int main(int argc, char* argv[]){
         exit(EXIT_FAILURE);
     }
 
-    bytes_read = read(source_fd, buf, BUFFER_SIZE);
+    if((bytes_read = read(source_fd, buf, BUFFER_SIZE)) == -1){
+        perror("read()");
+        exit(EXIT_FAILURE);
+    }
     while(bytes_read > 0){
         if((bytes_write = write(destination_fd, buf, bytes_read)) == -1){
             perror("write()");
             exit(EXIT_FAILURE);
         }
-        bytes_read = read(source_fd, buf, BUFFER_SIZE);
+        if((bytes_read = read(source_fd, buf, BUFFER_SIZE)) == -1){
+            perror("read()");
+            exit(EXIT_FAILURE);
+        }
     }
     if(close(source_fd) == -1)
         perror("close()");
