@@ -11,17 +11,21 @@ int main(int argc, char* argv[]){
         puts("Too few arguments");
         exit(EXIT_FAILURE);
     }
-    
-    int source_fd = open(argv[1], O_RDONLY);
-    int destination_fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     ssize_t bytes_read = 0;
     ssize_t bytes_write = 0;
     char buf[BUFFER_SIZE] = {};
 
-    if(source_fd == -1)
+    int source_fd = open(argv[1], O_RDONLY);
+    if(source_fd == -1){
         perror(argv[1]);
-    if(destination_fd == -1)
+        exit(EXIT_FAILURE);
+    }
+
+    int destination_fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if(destination_fd == -1){
         perror(argv[2]);
+        exit(EXIT_FAILURE);
+    }
 
     bytes_read = read(source_fd, buf, BUFFER_SIZE);
     while(bytes_read > 0){
