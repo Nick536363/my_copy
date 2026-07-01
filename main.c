@@ -38,6 +38,12 @@ int main(int argc, char* argv[]){
             perror("write()");
             exit(EXIT_FAILURE);
         }
+        while(bytes_write < bytes_read){
+            if((bytes_write = write(destination_fd, buf+bytes_read, bytes_read)) == -1){
+                perror("write()");
+                exit(EXIT_FAILURE);
+            }
+        }
         if((bytes_read = read(source_fd, buf, BUFFER_SIZE)) == -1){
             perror("read()");
             exit(EXIT_FAILURE);
