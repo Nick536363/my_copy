@@ -13,6 +13,7 @@ int main(int argc, char* argv[]){
     }
     ssize_t bytes_read = 0;
     ssize_t bytes_write = 0;
+    ssize_t total_write = 0;
     char buf[BUFFER_SIZE] = {};
 
     int source_fd = open(argv[1], O_RDONLY);
@@ -38,11 +39,13 @@ int main(int argc, char* argv[]){
             perror("write()");
             exit(EXIT_FAILURE);
         }
-        while(bytes_write < bytes_read){
-            if((bytes_write = write(destination_fd, buf+bytes_read, bytes_read)) == -1){
+        total_write += bytes_write;
+        while(total_write < bytes_read){
+            if((bytes_write = write(destination_fd, buf+total_write, bytes_read-total_write)) == -1){
                 perror("write()");
                 exit(EXIT_FAILURE);
             }
+            total_write += bytes_write;
         }
         if((bytes_read = read(source_fd, buf, BUFFER_SIZE)) == -1){
             perror("read()");
