@@ -11,10 +11,14 @@ int main(int argc, char* argv[]){
         exit(EXIT_FAILURE);
     }
     
-    
     int source_fd = open(argv[1], O_RDONLY);
+    int destination_fd = open(argv[2], O_WRONLY | O_CREAT, 0644);
+    char buf[4096] = {};
+
     if(source_fd == -1)
         perror(argv[1]);
+    if(destination_fd == -1)
+        perror(argv[2]);
 
     return 0;
 }
