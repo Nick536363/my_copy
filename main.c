@@ -24,6 +24,8 @@ int main(int argc, char* argv[]){
     int destination_fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if(destination_fd == -1){
         perror(argv[2]);
+        if(close(source_fd) == -1)
+            perror("close()");
         exit(EXIT_FAILURE);
     }
 
