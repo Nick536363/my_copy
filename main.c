@@ -7,8 +7,8 @@
 #define BUFFER_SIZE 4096
 
 int main(int argc, char* argv[]){
-    if(argc == 1 || argc == 2){
-        puts("Too few arguments");
+    if(argc != 3){
+        puts("Usage: mycp <source> <destination>");
         exit(EXIT_FAILURE);
     }
     ssize_t bytes_read = 0;
