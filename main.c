@@ -13,7 +13,7 @@ int main(int argc, char* argv[]){
     }
     
     int source_fd = open(argv[1], O_RDONLY);
-    int destination_fd = open(argv[2], O_WRONLY | O_CREAT, 0644);
+    int destination_fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     ssize_t bytes_read = 0;
     ssize_t bytes_write = 0;
     char buf[BUFFER_SIZE] = {};
@@ -23,14 +23,13 @@ int main(int argc, char* argv[]){
     if(destination_fd == -1)
         perror(argv[2]);
 
-    bytes_read = read(source_fd, buf, BUFFER_SIZE-1);
+    bytes_read = read(source_fd, buf, BUFFER_SIZE);
     while(bytes_read > 0){
-        buf[bytes_read] = '\0';
-        if(bytes_write = write(destination_fd, buf, BUFFER_SIZE) == -1){
+        if((bytes_write = write(destination_fd, buf, bytes_read)) == -1){
             perror("write()");
-            return -1;
+            exit(EXIT_FAILURE);
         }
-        bytes_read = read(source_fd, buf, BUFFER_SIZE-1);
+        bytes_read = read(source_fd, buf, BUFFER_SIZE);
     }
     if(close(source_fd) == -1)
         perror("close()");
