@@ -51,6 +51,7 @@ int main(int argc, char* argv[]){
             perror("read()");
             exit(EXIT_FAILURE);
         }
+        total_write = 0;
     }
     if(close(source_fd) == -1)
         perror("close()");
